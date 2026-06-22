@@ -1,0 +1,1517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>The Village — Luciana Diniz</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+  --blue:  #1A56DB;
+  --blue2: #4A90D9;
+  --blue3: #a8c8f8;
+  --dark:  #08080f;
+  --dark2: #0d0d1a;
+  --dark3: #121220;
+  --white: #ffffff;
+  --gray:  #8090b0;
+  --lgray: #c0ccdf;
+}
+
+html, body {
+  width:100%; height:100%;
+  background:var(--dark);
+  font-family:'Segoe UI', Georgia, Arial, sans-serif;
+  overflow:hidden;
+  color:var(--white);
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ── Deck ─────────────────────────────── */
+#deck { width:100vw; height:100vh; position:relative; }
+
+.slide {
+  position:absolute; inset:0;
+  opacity:0; transform:translateY(20px);
+  transition:opacity .45s ease, transform .45s ease;
+  pointer-events:none; overflow:hidden;
+}
+.slide.active { opacity:1; transform:translateY(0); pointer-events:all; }
+.slide.out    { opacity:0; transform:translateY(-20px); }
+
+.slide::after {
+  content:''; position:absolute; inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events:none; z-index:0;
+}
+
+/* ── Clickable card shared style ──────── */
+.clickable {
+  cursor:pointer;
+  position:relative;
+  transition:transform .18s, box-shadow .18s, border-color .18s !important;
+}
+.clickable:hover { transform:translateY(-3px) !important; box-shadow:0 8px 32px rgba(26,86,219,.18) !important; }
+.clickable::before {
+  content:''; position:absolute; inset:0;
+  border-radius:inherit; pointer-events:none;
+  background:rgba(26,86,219,.0);
+  transition:background .18s;
+}
+.clickable:hover::before { background:rgba(26,86,219,.04); }
+.click-hint {
+  position:absolute; top:10px; right:10px;
+  width:20px; height:20px; border-radius:50%;
+  background:rgba(26,86,219,.25);
+  border:1px solid rgba(74,144,217,.4);
+  display:flex; align-items:center; justify-content:center;
+  font-size:.6rem; color:var(--blue3); font-weight:700;
+  opacity:.7; pointer-events:none;
+}
+.clickable:hover .click-hint { opacity:1; background:rgba(26,86,219,.4); }
+
+/* ── SLIDE 1 — COVER ──────────────────── */
+#s1 {
+  background:var(--dark);
+  display:flex; align-items:center; justify-content:center;
+}
+#s1 .bg-lines {
+  position:absolute; inset:0; z-index:0;
+  background:
+    linear-gradient(180deg,transparent 60%,rgba(26,86,219,.06) 100%),
+    repeating-linear-gradient(90deg,transparent,transparent 119px,rgba(26,86,219,.04) 120px);
+}
+#s1 .glow {
+  position:absolute; z-index:0;
+  width:600px; height:600px;
+  background:radial-gradient(circle,rgba(26,86,219,.15) 0%,transparent 70%);
+  left:50%; top:50%; transform:translate(-50%,-55%);
+}
+#s1 .content { position:relative; z-index:1; text-align:center; padding:20px; }
+#s1 .eyebrow { font-size:.72rem; letter-spacing:6px; text-transform:uppercase; color:var(--blue2); margin-bottom:28px; }
+#s1 h1 {
+  font-size:clamp(3rem,8vw,6.5rem); font-weight:800; line-height:1; letter-spacing:-2px;
+  background:linear-gradient(135deg,#fff 30%,var(--blue2) 100%);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+}
+#s1 .sub { font-size:clamp(.9rem,2vw,1.2rem); color:var(--gray); margin-top:20px; font-weight:300; letter-spacing:2px; }
+#s1 .bar { width:60px; height:3px; background:linear-gradient(90deg,var(--blue),var(--blue2)); margin:28px auto; border-radius:2px; }
+#s1 .author { font-size:.8rem; color:var(--gray); letter-spacing:3px; text-transform:uppercase; margin-top:40px; }
+
+/* ── SLIDE 2 — LUCIANA ────────────────── */
+#s2 { background:var(--dark2); display:grid; grid-template-columns:1fr 1fr; }
+#s2 .left {
+  background:linear-gradient(135deg,#0a0a18,#0d1535);
+  display:flex; flex-direction:column; justify-content:center;
+  padding:60px 50px; border-right:1px solid rgba(26,86,219,.2); position:relative;
+  overflow-y:auto;
+}
+#s2 .left::before {
+  content:''; position:absolute; left:0; top:0;
+  width:4px; height:100%;
+  background:linear-gradient(180deg,var(--blue),transparent);
+}
+.label { font-size:.68rem; letter-spacing:5px; text-transform:uppercase; color:var(--blue2); margin-bottom:20px; }
+#s2 .left h2 { font-size:clamp(1.8rem,3vw,2.8rem); font-weight:800; line-height:1.1; color:var(--white); margin-bottom:16px; }
+#s2 .left p { font-size:.95rem; color:var(--gray); line-height:1.8; }
+#s2 .stats { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:30px; }
+#s2 .stat {
+  background:rgba(26,86,219,.08); border:1px solid rgba(26,86,219,.2);
+  border-radius:10px; padding:14px;
+}
+#s2 .stat-num { font-size:1.8rem; font-weight:800; color:var(--blue2); line-height:1; }
+#s2 .stat-label { font-size:.75rem; color:var(--gray); margin-top:4px; line-height:1.4; }
+#s2 .right { display:flex; flex-direction:column; justify-content:center; padding:60px 50px; gap:16px; overflow-y:auto; }
+#s2 .right h3 { font-size:.68rem; letter-spacing:5px; text-transform:uppercase; color:var(--blue2); margin-bottom:4px; }
+.cred-item {
+  display:flex; align-items:flex-start; gap:14px;
+  padding:14px 18px;
+  background:rgba(255,255,255,.02); border:1px solid rgba(255,255,255,.06);
+  border-radius:10px;
+}
+.cred-icon { font-size:1.4rem; flex-shrink:0; margin-top:2px; }
+.cred-text { font-size:.86rem; color:var(--lgray); line-height:1.5; }
+.cred-text strong { color:var(--white); display:block; margin-bottom:2px; }
+
+/* ── SLIDE 3 — THE GAP ────────────────── */
+#s3 { background:var(--dark); display:flex; flex-direction:column; justify-content:center; padding:60px 80px; overflow-y:auto; }
+#s3 h2 { font-size:clamp(1.4rem,3vw,2.2rem); font-weight:800; margin-bottom:36px; }
+#s3 h2 span { color:var(--blue2); }
+.compare { display:grid; grid-template-columns:1fr 50px 1fr; align-items:stretch; }
+.compare-col { border-radius:12px; padding:28px 24px; }
+.compare-col.now  { background:rgba(255,60,80,.05); border:1px solid rgba(255,60,80,.2); }
+.compare-col.future { background:rgba(26,86,219,.06); border:1px solid rgba(26,86,219,.25); }
+.compare-tag { font-size:.65rem; letter-spacing:4px; text-transform:uppercase; margin-bottom:14px; }
+.compare-col.now .compare-tag { color:#ff4466; }
+.compare-col.future .compare-tag { color:var(--blue2); }
+.compare-col h3 { font-size:1.2rem; font-weight:700; margin-bottom:14px; }
+.compare-col.now h3 { color:#ff8899; }
+.compare-col.future h3 { color:var(--blue3); }
+.compare-col ul { list-style:none; }
+.compare-col li { font-size:.85rem; color:var(--gray); padding:6px 0 6px 20px; position:relative; border-bottom:1px solid rgba(255,255,255,.04); line-height:1.5; }
+.compare-col.now li::before { content:'—'; color:#ff4466; position:absolute; left:0; }
+.compare-col.future li::before { content:'→'; color:var(--blue2); position:absolute; left:0; }
+.compare-arrow { display:flex; align-items:center; justify-content:center; font-size:1.6rem; color:var(--blue2); opacity:.5; }
+
+/* ── SLIDE 4 — CONCEPT ────────────────── */
+#s4 { background:var(--dark2); display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:50px 80px; overflow-y:auto; }
+#s4 .eyebrow { font-size:.68rem; letter-spacing:6px; text-transform:uppercase; color:var(--blue2); margin-bottom:16px; }
+#s4 h2 { font-size:clamp(1.6rem,4vw,3.2rem); font-weight:800; margin-bottom:20px; line-height:1.15; }
+#s4 h2 em { font-style:normal; color:var(--blue2); }
+#s4 .lead { font-size:clamp(.88rem,1.5vw,1.05rem); color:var(--gray); max-width:640px; line-height:1.8; margin-bottom:36px; }
+.concept-map { display:flex; align-items:center; justify-content:center; width:100%; max-width:760px; }
+.hub {
+  background:linear-gradient(135deg,var(--blue),#0d3a9e);
+  border-radius:50%; width:120px; height:120px; flex-shrink:0;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  box-shadow:0 0 60px rgba(26,86,219,.4); z-index:1;
+}
+.hub .hub-label { font-size:.6rem; letter-spacing:3px; text-transform:uppercase; color:rgba(255,255,255,.6); }
+.hub .hub-name { font-size:.95rem; font-weight:800; color:var(--white); margin-top:4px; }
+.spokes { display:flex; flex-direction:column; gap:7px; flex:1; }
+.spoke { display:flex; align-items:center; gap:8px; }
+.spoke-line { flex:1; height:1px; background:linear-gradient(90deg,var(--blue),rgba(26,86,219,.1)); }
+.spoke-box {
+  background:var(--dark3); border:1px solid rgba(26,86,219,.25); border-radius:6px;
+  padding:5px 12px; font-size:.78rem; color:var(--lgray); white-space:nowrap;
+}
+.spokes-left .spoke { flex-direction:row-reverse; }
+.spokes-left .spoke-line { background:linear-gradient(270deg,var(--blue),rgba(26,86,219,.1)); }
+.spoke-box.clickable { cursor:pointer; }
+.spoke-box.clickable:hover { border-color:var(--blue2); color:var(--white); transform:none !important; box-shadow:none !important; }
+
+/* ── SLIDE 5 — WORLD ──────────────────── */
+#s5 { background:var(--dark); padding:48px 64px 80px; display:flex; flex-direction:column; overflow-y:auto; }
+#s5 h2 { font-size:clamp(1.4rem,2.5vw,1.8rem); font-weight:800; margin-bottom:22px; flex-shrink:0; }
+#s5 h2 span { color:var(--blue2); }
+.halls-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; flex:1; }
+.hall {
+  background:var(--dark3); border:1px solid rgba(255,255,255,.07);
+  border-top:3px solid; border-radius:10px; padding:16px 14px;
+  display:flex; flex-direction:column;
+}
+.hall:nth-child(odd)  { border-top-color:var(--blue); }
+.hall:nth-child(even) { border-top-color:var(--blue2); }
+.hall-emoji { font-size:1.4rem; margin-bottom:8px; }
+.hall-name  { font-size:.88rem; font-weight:700; color:var(--white); margin-bottom:5px; }
+.hall-desc  { font-size:.74rem; color:var(--gray); line-height:1.5; flex:1; }
+.hall-tag   { margin-top:9px; display:inline-block; font-size:.62rem; letter-spacing:2px; text-transform:uppercase; color:var(--blue2); padding:2px 8px; background:rgba(26,86,219,.1); border-radius:4px; }
+
+/* ── SLIDE 6 — ECOSYSTEM ─────────────── */
+#s6 { background:var(--dark2); padding:56px 64px; display:flex; flex-direction:column; justify-content:center; overflow-y:auto; }
+#s6 h2 { font-size:clamp(1.4rem,2.5vw,1.9rem); font-weight:800; margin-bottom:8px; }
+#s6 .sub { font-size:.92rem; color:var(--gray); margin-bottom:28px; }
+.eco-row { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
+.eco { border-radius:12px; padding:22px 18px; display:flex; flex-direction:column; gap:9px; border:1px solid; }
+.eco:nth-child(1) { background:rgba(26,86,219,.06);  border-color:rgba(26,86,219,.3); }
+.eco:nth-child(2) { background:rgba(255,60,90,.05);  border-color:rgba(255,60,90,.25); }
+.eco:nth-child(3) { background:rgba(74,144,217,.06); border-color:rgba(74,144,217,.3); }
+.eco:nth-child(4) { background:rgba(34,204,120,.05); border-color:rgba(34,204,120,.2); }
+.eco-icon  { font-size:1.7rem; }
+.eco-name  { font-size:.68rem; font-weight:700; letter-spacing:4px; text-transform:uppercase; }
+.eco:nth-child(1) .eco-name { color:var(--blue2); }
+.eco:nth-child(2) .eco-name { color:#ff6080; }
+.eco:nth-child(3) .eco-name { color:var(--blue3); }
+.eco:nth-child(4) .eco-name { color:#44ddaa; }
+.eco-title { font-size:.95rem; font-weight:700; color:var(--white); }
+.eco-lines { display:flex; flex-direction:column; gap:5px; }
+.eco-line  { font-size:.78rem; color:var(--gray); line-height:1.4; }
+.eco-line strong { color:var(--lgray); }
+.eco-role  { margin-top:auto; padding-top:10px; border-top:1px solid rgba(255,255,255,.06); font-size:.73rem; color:var(--gray); font-style:italic; }
+
+/* ── SLIDE 7 — REVENUE ────────────────── */
+#s7 { background:var(--dark); padding:56px 80px; display:flex; flex-direction:column; justify-content:center; overflow-y:auto; }
+#s7 h2 { font-size:clamp(1.4rem,2.5vw,1.9rem); font-weight:800; margin-bottom:8px; }
+#s7 .sub { font-size:.92rem; color:var(--gray); margin-bottom:28px; }
+.rev-grid { display:grid; grid-template-columns:2fr 1fr 1fr; gap:14px; }
+.rev-card { background:var(--dark3); border-radius:12px; padding:24px 20px; border:1px solid rgba(255,255,255,.07); display:flex; flex-direction:column; gap:9px; }
+.rev-card.primary { background:linear-gradient(135deg,#0d1a40,#0a1230); border-color:rgba(26,86,219,.4); box-shadow:0 0 40px rgba(26,86,219,.12); }
+.rev-badge { font-size:.62rem; font-weight:700; letter-spacing:3px; text-transform:uppercase; padding:3px 10px; border-radius:20px; display:inline-block; width:fit-content; }
+.rev-card.primary .rev-badge    { background:rgba(26,86,219,.3); color:var(--blue3); }
+.rev-card:not(.primary) .rev-badge { background:rgba(255,255,255,.06); color:var(--gray); }
+.rev-title { font-size:1.1rem; font-weight:700; color:var(--white); }
+.rev-card.primary .rev-title { font-size:1.3rem; }
+.rev-desc { font-size:.81rem; color:var(--gray); line-height:1.6; flex:1; }
+.rev-note { font-size:.73rem; color:var(--blue3); border-top:1px solid rgba(26,86,219,.2); padding-top:9px; }
+.rev-side { display:flex; flex-direction:column; gap:14px; }
+
+/* ── SLIDE 8 — AUDIENCE ──────────────── */
+#s8 { background:var(--dark2); padding:56px 80px; display:flex; flex-direction:column; justify-content:center; overflow-y:auto; }
+#s8 h2 { font-size:clamp(1.4rem,2.5vw,1.9rem); font-weight:800; margin-bottom:8px; }
+#s8 .sub { font-size:.92rem; color:var(--gray); margin-bottom:28px; }
+.audience-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:20px; }
+.aud-card { background:var(--dark3); border-radius:12px; padding:22px 18px; border:1px solid rgba(255,255,255,.07); }
+.aud-icon  { font-size:1.9rem; margin-bottom:10px; }
+.aud-title { font-size:.95rem; font-weight:700; color:var(--white); margin-bottom:7px; }
+.aud-desc  { font-size:.81rem; color:var(--gray); line-height:1.6; }
+.aud-proof { background:rgba(26,86,219,.06); border:1px solid rgba(26,86,219,.2); border-radius:10px; padding:16px 20px; display:flex; gap:24px; align-items:center; flex-wrap:wrap; justify-content:center; }
+.proof-item { text-align:center; }
+.proof-num   { font-size:1.8rem; font-weight:800; color:var(--blue2); }
+.proof-label { font-size:.72rem; color:var(--gray); margin-top:3px; }
+
+/* ── SLIDE 9 — VISION ─────────────────── */
+#s9 { background:var(--dark); display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:60px 120px; overflow-y:auto; }
+#s9 .glow { position:absolute; width:500px; height:500px; background:radial-gradient(circle,rgba(26,86,219,.12) 0%,transparent 70%); left:50%; top:50%; transform:translate(-50%,-50%); z-index:0; pointer-events:none; }
+#s9 .content { position:relative; z-index:1; }
+#s9 .eyebrow { font-size:.68rem; letter-spacing:6px; text-transform:uppercase; color:var(--blue2); margin-bottom:20px; }
+#s9 h2 { font-size:clamp(1.5rem,3.5vw,2.8rem); font-weight:800; line-height:1.3; margin-bottom:28px; }
+#s9 h2 em { font-style:normal; color:var(--blue2); }
+#s9 p { font-size:clamp(.88rem,1.5vw,1.05rem); color:var(--gray); max-width:640px; line-height:1.9; margin:0 auto 36px; }
+.vision-pillars { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+.pillar { background:var(--dark3); border:1px solid rgba(26,86,219,.2); border-radius:40px; padding:9px 20px; font-size:.83rem; color:var(--lgray); display:flex; align-items:center; gap:8px; }
+.pillar span { color:var(--blue2); }
+
+/* ── Navigation ───────────────────────── */
+#nav {
+  position:fixed; bottom:20px; left:50%; transform:translateX(-50%);
+  display:flex; align-items:center; gap:14px;
+  background:rgba(8,8,15,.92); backdrop-filter:blur(16px);
+  border:1px solid rgba(255,255,255,.08); border-radius:40px;
+  padding:8px 18px; z-index:500;
+}
+.nbtn { background:none; border:none; cursor:pointer; color:var(--gray); font-size:1rem; width:28px; height:28px; display:flex; align-items:center; justify-content:center; border-radius:50%; transition:background .15s,color .15s; }
+.nbtn:hover { background:rgba(26,86,219,.2); color:var(--white); }
+.nbtn:disabled { opacity:.2; cursor:default; }
+.dots { display:flex; gap:6px; }
+.dot { width:6px; height:6px; border-radius:50%; background:rgba(255,255,255,.15); cursor:pointer; transition:background .25s,transform .25s; }
+.dot.active { background:var(--blue); transform:scale(1.4); }
+#slide-label { font-size:.68rem; color:var(--gray); letter-spacing:2px; min-width:52px; text-align:center; }
+
+/* ── MODAL ─────────────────────────────── */
+#modal-overlay {
+  position:fixed; inset:0; z-index:1000;
+  background:rgba(4,4,12,.82); backdrop-filter:blur(12px);
+  display:flex; align-items:center; justify-content:center;
+  opacity:0; pointer-events:none;
+  transition:opacity .25s;
+  padding:20px;
+}
+#modal-overlay.open { opacity:1; pointer-events:all; }
+#modal-box {
+  background:linear-gradient(135deg,#0d1a40,#0a1230);
+  border:1px solid rgba(26,86,219,.35);
+  border-radius:18px; width:100%; max-width:600px;
+  max-height:85vh; overflow-y:auto;
+  transform:scale(.94) translateY(12px);
+  transition:transform .28s ease;
+  box-shadow:0 32px 80px rgba(0,0,0,.6), 0 0 60px rgba(26,86,219,.15);
+}
+#modal-overlay.open #modal-box { transform:scale(1) translateY(0); }
+#modal-header {
+  display:flex; align-items:flex-start; justify-content:space-between;
+  padding:28px 28px 0; gap:16px;
+}
+#modal-emoji { font-size:2.2rem; flex-shrink:0; line-height:1; margin-top:2px; }
+#modal-titles { flex:1; }
+#modal-tag { font-size:.62rem; letter-spacing:4px; text-transform:uppercase; color:var(--blue2); margin-bottom:6px; }
+#modal-title { font-size:1.4rem; font-weight:800; color:var(--white); line-height:1.2; }
+#modal-subtitle { font-size:.85rem; color:var(--gray); margin-top:4px; }
+#modal-close {
+  background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1);
+  border-radius:50%; width:32px; height:32px; font-size:1rem; color:var(--gray);
+  cursor:pointer; flex-shrink:0; display:flex; align-items:center; justify-content:center;
+  transition:background .15s, color .15s;
+}
+#modal-close:hover { background:rgba(255,60,80,.15); color:#ff6080; }
+#modal-divider { height:1px; background:rgba(26,86,219,.2); margin:20px 28px; }
+#modal-body { padding:0 28px 28px; }
+.modal-section { margin-bottom:18px; }
+.modal-section-title { font-size:.68rem; letter-spacing:4px; text-transform:uppercase; color:var(--blue2); margin-bottom:10px; }
+.modal-point {
+  display:flex; gap:10px; padding:8px 0;
+  border-bottom:1px solid rgba(255,255,255,.04);
+}
+.modal-point:last-child { border-bottom:none; }
+.modal-dot { color:var(--blue2); flex-shrink:0; margin-top:1px; font-size:.8rem; }
+.modal-text { font-size:.85rem; color:var(--lgray); line-height:1.6; }
+.modal-text strong { color:var(--white); }
+.modal-note {
+  margin-top:16px; padding:12px 16px;
+  background:rgba(26,86,219,.1); border:1px solid rgba(26,86,219,.25);
+  border-radius:8px; font-size:.8rem; color:var(--blue3); line-height:1.6;
+}
+
+/* ── MOBILE RESPONSIVE ────────────────── */
+@media (max-width:768px) {
+  html, body { overflow:auto; height:auto; }
+
+  #deck { height:auto; min-height:100vh; }
+
+  .slide {
+    position:relative; inset:auto;
+    /* display is controlled by JS inline styles on mobile */
+    opacity:1; transform:none;
+    min-height:100svh; height:auto; pointer-events:all;
+    overflow:visible; overflow-y:auto;
+    transition:none;
+  }
+
+  /* ── S1 mobile ── */
+  #s1 { padding:40px 24px; min-height:100svh; display:flex; align-items:center; justify-content:center; }
+  #s1 h1 { font-size:clamp(2.8rem,12vw,4rem); }
+  #s1 .glow { width:300px; height:300px; }
+
+  /* ── S2 mobile ── */
+  #s2 { grid-template-columns:1fr; min-height:auto; }
+  #s2 .left  { padding:40px 24px 24px; border-right:none; border-bottom:1px solid rgba(26,86,219,.2); }
+  #s2 .right { padding:24px 24px 40px; }
+  #s2 .stats { grid-template-columns:1fr 1fr; }
+  #s2 .stat-num { font-size:1.5rem; }
+
+  /* ── S3 mobile ── */
+  #s3 { padding:40px 20px; }
+  .compare { grid-template-columns:1fr; }
+  .compare-arrow { transform:rotate(90deg); padding:8px 0; }
+  .compare-col { margin-bottom:0; }
+
+  /* ── S4 mobile ── */
+  #s4 { padding:40px 20px; }
+  #s4 .lead { font-size:.9rem; }
+  .concept-map { flex-direction:column; gap:12px; }
+  .spokes, .spokes-left { flex-direction:column; width:100%; }
+  .spoke, .spokes-left .spoke { flex-direction:row !important; }
+  .spoke-line, .spokes-left .spoke-line { background:linear-gradient(90deg,var(--blue),rgba(26,86,219,.1)) !important; }
+  .hub { width:100px; height:100px; }
+
+  /* ── S5 mobile ── */
+  #s5 { padding:32px 16px 80px; min-height:auto; }
+  .halls-grid { grid-template-columns:1fr 1fr; gap:8px; }
+  .hall { padding:12px 10px; }
+  .hall-emoji { font-size:1.2rem; }
+  .hall-name  { font-size:.82rem; }
+  .hall-desc  { font-size:.72rem; }
+
+  /* ── S6 mobile ── */
+  #s6 { padding:32px 16px 80px; justify-content:flex-start; min-height:auto; }
+  .eco-row { grid-template-columns:1fr 1fr; gap:10px; }
+  .eco { padding:16px 14px; }
+
+  /* ── S7 mobile ── */
+  #s7 { padding:32px 16px 80px; justify-content:flex-start; min-height:auto; }
+  .rev-grid { grid-template-columns:1fr; }
+  .rev-side { gap:10px; }
+
+  /* ── S8 mobile ── */
+  #s8 { padding:32px 16px 80px; justify-content:flex-start; min-height:auto; }
+  .audience-grid { grid-template-columns:1fr; gap:10px; }
+  .aud-proof { gap:14px; padding:14px 12px; }
+  .proof-num { font-size:1.4rem; }
+
+  /* ── S9 mobile ── */
+  #s9 { padding:40px 20px 80px; min-height:auto; }
+  #s9 .glow { display:none; }
+  .vision-pillars { gap:8px; }
+  .pillar { font-size:.78rem; padding:7px 14px; }
+
+  /* ── Nav mobile ── */
+  #nav { bottom:12px; padding:6px 14px; gap:10px; }
+  #slide-label { display:none; }
+
+  /* ── Modal mobile ── */
+  #modal-overlay { padding:12px; align-items:flex-end; }
+  #modal-box { border-radius:16px 16px 12px 12px; max-height:88vh; }
+}
+
+@media (max-width:400px) {
+  .halls-grid  { grid-template-columns:1fr; }
+  .eco-row     { grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body>
+<div id="deck">
+
+<!-- ── S1: COVER ─────────────────────── -->
+<div class="slide active" id="s1">
+  <div class="bg-lines"></div>
+  <div class="glow"></div>
+  <div class="content">
+    <div class="eyebrow">A private digital world</div>
+    <h1>The Village</h1>
+    <div class="bar"></div>
+    <div class="sub">The digital home of Luciana Diniz</div>
+    <div class="author">Confidential &nbsp;·&nbsp; 2026</div>
+  </div>
+</div>
+
+<!-- ── S2: LUCIANA ───────────────────── -->
+<div class="slide" id="s2">
+  <div class="left">
+    <div class="label">The person</div>
+    <h2>Luciana<br>Diniz</h2>
+    <p>Five-time Olympian. Creator of the Butterfly Method®. Entrepreneur, athlete, and one of Europe's most recognised equestrian figures — with a loyal global audience and a body of work that spans sport, personal development, and technology.</p>
+    <div class="stats">
+      <div class="stat clickable" data-detail="stat-olympics" style="position:relative">
+        <div class="click-hint">+</div>
+        <div class="stat-num">5×</div>
+        <div class="stat-label">Olympic Games<br>as competitor</div>
+      </div>
+      <div class="stat clickable" data-detail="stat-butterfly" style="position:relative">
+        <div class="click-hint">+</div>
+        <div class="stat-num">8</div>
+        <div class="stat-label">Dimensions of the Butterfly Method®</div>
+      </div>
+      <div class="stat clickable" data-detail="stat-ai" style="position:relative">
+        <div class="click-hint">+</div>
+        <div class="stat-num">5</div>
+        <div class="stat-label">AI coaching agents already live</div>
+      </div>
+      <div class="stat clickable" data-detail="stat-horses" style="position:relative">
+        <div class="click-hint">+</div>
+        <div class="stat-num">6</div>
+        <div class="stat-label">Champion horses in active career</div>
+      </div>
+    </div>
+  </div>
+  <div class="right">
+    <h3>What she has built</h3>
+    <div class="cred-item clickable" data-detail="cred-butterfly" style="position:relative">
+      <div class="click-hint">+</div>
+      <div class="cred-icon">🦋</div>
+      <div class="cred-text">
+        <strong>Butterfly Method®</strong>
+        A holistic framework for rider development — not just technique, but the whole human: mindset, performance, self-knowledge, resilience.
+      </div>
+    </div>
+    <div class="cred-item clickable" data-detail="cred-hotmart" style="position:relative">
+      <div class="click-hint">+</div>
+      <div class="cred-icon">🎓</div>
+      <div class="cred-text">
+        <strong>Online Academy — Hotmart</strong>
+        Masterclasses (My Way I/II/III) and specialist programmes with world-class equestrian coaches, already selling internationally.
+      </div>
+    </div>
+    <div class="cred-item clickable" data-detail="cred-ai" style="position:relative">
+      <div class="click-hint">+</div>
+      <div class="cred-icon">🤖</div>
+      <div class="cred-text">
+        <strong>AI Agents — Chatbase</strong>
+        Five specialised AI coaching agents (Butterfly, Lucki, Trevo, Obstacle, LUCKI) — already live and operating.
+      </div>
+    </div>
+    <div class="cred-item clickable" data-detail="cred-checkmatch" style="position:relative">
+      <div class="click-hint">+</div>
+      <div class="cred-icon">🔮</div>
+      <div class="cred-text">
+        <strong>CheckMatch App</strong>
+        A horse-rider compatibility tool — built and functional. Unique in the equestrian tech space.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── S3: THE GAP ───────────────────── -->
+<div class="slide" id="s3">
+  <h2>The brand is world-class.<br><span>The digital presence is not.</span></h2>
+  <div class="compare">
+    <div class="compare-col now">
+      <div class="compare-tag">Today — Wix website</div>
+      <h3>Scattered. Generic. Invisible.</h3>
+      <ul>
+        <li>Standard menu navigation with no identity</li>
+        <li>Content scattered across platforms with no connective thread</li>
+        <li>"Buy Here" links away to Hotmart with no context</li>
+        <li>AI agents, game, CheckMatch — barely surfaced</li>
+        <li>No live content, no membership layer</li>
+        <li>Premium athlete. Off-the-shelf website.</li>
+      </ul>
+    </div>
+    <div class="compare-arrow">→</div>
+    <div class="compare-col future">
+      <div class="compare-tag">The Village — new site</div>
+      <h3>Immersive. Cohesive. Unmistakable.</h3>
+      <ul>
+        <li>A visual map — users <em>explore</em>, not browse</li>
+        <li>8 themed halls, each a destination in itself</li>
+        <li>Live training streams as the primary revenue engine</li>
+        <li>AI agents, game and CheckMatch front and centre</li>
+        <li>Freemium membership — free taste, paid depth</li>
+        <li>A digital world worthy of a five-time Olympian</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ── S4: CONCEPT ───────────────────── -->
+<div class="slide" id="s4">
+  <div class="eyebrow">The core idea</div>
+  <h2>Not a website.<br><em>A village.</em></h2>
+  <p class="lead">The user doesn't land on a homepage — they arrive at a map. Like a theme park, they choose which hall to enter. Every hall has its own atmosphere, its own purpose. Navigation becomes exploration. Browsing becomes belonging.</p>
+  <div class="concept-map">
+    <div class="spokes spokes-left">
+      <div class="spoke"><div class="spoke-box clickable" data-detail="hall-square">🏛️ Village Square</div><div class="spoke-line"></div></div>
+      <div class="spoke"><div class="spoke-box clickable" data-detail="hall-academy">🎓 The Academy</div><div class="spoke-line"></div></div>
+      <div class="spoke"><div class="spoke-box clickable" data-detail="hall-stables">🐴 The Stables</div><div class="spoke-line"></div></div>
+      <div class="spoke"><div class="spoke-box clickable" data-detail="hall-lab">🤖 The Lab</div><div class="spoke-line"></div></div>
+    </div>
+    <div class="hub">
+      <div class="hub-label">The</div>
+      <div class="hub-name">Village</div>
+    </div>
+    <div class="spokes">
+      <div class="spoke"><div class="spoke-line"></div><div class="spoke-box clickable" data-detail="hall-arena">🎮 The Arena</div></div>
+      <div class="spoke"><div class="spoke-line"></div><div class="spoke-box clickable" data-detail="hall-match">🔮 The Match Room</div></div>
+      <div class="spoke"><div class="spoke-line"></div><div class="spoke-box clickable" data-detail="hall-auditorium">🎭 The Auditorium</div></div>
+      <div class="spoke"><div class="spoke-line"></div><div class="spoke-box clickable" data-detail="hall-shop">🛍️ The Shop</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── S5: THE WORLD ─────────────────── -->
+<div class="slide" id="s5">
+  <h2>Eight halls. <span>One world.</span></h2>
+  <div class="halls-grid">
+    <div class="hall clickable" data-detail="hall-square" style="position:relative">
+      <div class="click-hint">+</div>
+      <div class="hall-emoji">🏛️</div>
+      <div class="hall-name">Village Square</div>
+      <div class="hall-desc">The entry point. Interactive map hub, Luciana's story, brand manifesto and CTAs to every hall.</div>
+      <div class="hall-tag">Hub</div>
+    </div>
+    <div class="hall clickable" data-detail="hall-academy" style="position:relative">
+      <div class="click-hint">+</div>
+      <div class="hall-emoji">🎓</div>
+      <div class="hall-name">The Academy</div>
+      <div class="hall-desc">Holistic rider development. Butterfly Method® (8 dimensions), freemium native content, Hotmart courses and YouTube.</div>
+      <div class="hall-tag">Freemium</div>
+    </div>
+    <div class="hall clickable" data-detail="hall-stables" style="position:relative">
+      <div class="click-hint">+</div>
+      <div class="hall-emoji">🐴</div>
+      <div class="hall-name">The Stables / Welfare</div>
+      <div class="hall-desc">The 6 horses, breeding programme, animal welfare philosophy and specialist technical courses.</div>
+      <div class="hall-tag">Equestrian</div>
+    </div>
+    <div class="hall clickable" data-detail="hall-lab" style="position:relative">
+      <div class="click-hint">+</div>
+      <div class="hall-emoji">🤖</div>
+      <div class="hall-name">The Lab</div>
+      <div class="hall-desc">5 AI coaching agents — already live. Butterfly, Lucki, Trevo, Obstacle and LUCKI. Each a specialist.</div>
+      <div class="hall-tag">AI · Live now</div>
+    </div>
+    <div class="hall clickable" data-detail="hall-arena" style="position:relative">
+      <div class="click-hint">+</div>
+      <div class="hall-emoji">🎮</div>
+      <div class="hall-name">The Arena</div>
+      <div class="hall-desc">Gamified experience. The Butterfly Way game with coins, rankings and achievements.</div>
+      <div class="hall-tag">Gamification</div>
+    </div>
+    <div class="hall clickable" data-detail="hall-match" style="position:relative">
+      <div class="click-hint">+</div>
+      <div class="hall-emoji">🔮</div>
+      <div class="hall-name">The Match Room</div>
+      <div class="hall-desc">CheckMatch: a horse-rider compatibility app. Already built — unique in the equestrian space.</div>
+      <div class="hall-tag">App · Built</div>
+    </div>
+    <div class="hall clickable" data-detail="hall-auditorium" style="position:relative">
+      <div class="click-hint">+</div>
+      <div class="hall-emoji">🎭</div>
+      <div class="hall-name">The Auditorium</div>
+      <div class="hall-desc">Live training streams. Real daily sessions turned into paid content. Specialist masterclasses live.</div>
+      <div class="hall-tag">Primary revenue</div>
+    </div>
+    <div class="hall clickable" data-detail="hall-shop" style="position:relative">
+      <div class="click-hint">+</div>
+      <div class="hall-emoji">🛍️</div>
+      <div class="hall-name">The Shop</div>
+      <div class="hall-desc">Curated partner products. Horse Circles, merchandise and brand partners. Redirect model — no own checkout.</div>
+      <div class="hall-tag">Partners</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── S6: ECOSYSTEM ─────────────────── -->
+<div class="slide" id="s6">
+  <h2>The content ecosystem</h2>
+  <p class="sub">The Village doesn't replace existing platforms — it unifies them into one coherent experience.</p>
+  <div class="eco-row">
+    <div class="eco clickable" data-detail="eco-hotmart" style="position:relative">
+      <div class="click-hint">+</div>
+      <div class="eco-icon">🎓</div>
+      <div class="eco-name">Hotmart</div>
+      <div class="eco-title">Courses & Masterclasses</div>
+      <div class="eco-lines">
+        <div class="eco-line"><strong>My Way I / II / III</strong> — Butterfly Method® masterclasses</div>
+        <div class="eco-line"><strong>8-Aspects Program</strong> — specialist welfare courses</div>
+        <div class="eco-line">E-books, bundles, Jump-Offs videos</div>
+      </div>
+      <div class="eco-role">Site shows product cards → links to Hotmart. No migration.</div>
+    </div>
+    <div class="eco clickable" data-detail="eco-youtube" style="position:relative">
+      <div class="click-hint">+</div>
+      <div class="eco-icon">▶️</div>
+      <div class="eco-name">YouTube</div>
+      <div class="eco-title">Video & Channel Membership</div>
+      <div class="eco-lines">
+        <div class="eco-line">Free channel content</div>
+        <div class="eco-line">Paid YouTube channel membership</div>
+        <div class="eco-line">Embedded previews on the site</div>
+      </div>
+      <div class="eco-role">Site embeds and links to channel and membership.</div>
+    </div>
+    <div class="eco clickable" data-detail="eco-native" style="position:relative">
+      <div class="click-hint">+</div>
+      <div class="eco-icon">🌐</div>
+      <div class="eco-name">Native Site</div>
+      <div class="eco-title">The Village — Freemium Hub</div>
+      <div class="eco-lines">
+        <div class="eco-line">Butterfly Method® interactive content</div>
+        <div class="eco-line">AI agents, game, CheckMatch</div>
+        <div class="eco-line"><strong>Live training streams</strong> — primary revenue</div>
+      </div>
+      <div class="eco-role">Freemium + paid lives + membership subscription.</div>
+    </div>
+    <div class="eco clickable" data-detail="eco-shop" style="position:relative">
+      <div class="click-hint">+</div>
+      <div class="eco-icon">🛍️</div>
+      <div class="eco-name">The Shop</div>
+      <div class="eco-title">Partner Aggregator</div>
+      <div class="eco-lines">
+        <div class="eco-line">Horse Circles equestrian products</div>
+        <div class="eco-line">LD Merchandise (via partner)</div>
+        <div class="eco-line">Brand partners & affiliates</div>
+      </div>
+      <div class="eco-role">Curated showcase → redirect to partner platforms.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── S7: REVENUE ───────────────────── -->
+<div class="slide" id="s7">
+  <h2>How The Village makes money</h2>
+  <p class="sub">Three native revenue streams — plus two external platforms operating independently.</p>
+  <div class="rev-grid">
+    <div class="rev-card primary clickable" data-detail="rev-lives" style="position:relative">
+      <div class="click-hint">+</div>
+      <div class="rev-badge">Primary revenue driver</div>
+      <div class="rev-title">🎭 Live Training Streams</div>
+      <div class="rev-desc">Real daily training sessions recorded and published as paid content in The Auditorium. Authentic, raw, exclusive access to Luciana's world. Specialist live masterclasses also sold here.</div>
+      <div class="rev-note">Pay-per-event or subscription · Archive available to members</div>
+    </div>
+    <div class="rev-side">
+      <div class="rev-card clickable" data-detail="rev-membership" style="position:relative">
+        <div class="click-hint">+</div>
+        <div class="rev-badge">Recurring</div>
+        <div class="rev-title">🔑 Site Membership</div>
+        <div class="rev-desc">Freemium model: free access to a taste of every hall. Full access behind a monthly subscription.</div>
+        <div class="rev-note">Own gateway · Stripe · Recurring monthly</div>
+      </div>
+      <div class="rev-card clickable" data-detail="rev-external" style="position:relative">
+        <div class="click-hint">+</div>
+        <div class="rev-badge">External</div>
+        <div class="rev-title">🔗 Hotmart + YouTube</div>
+        <div class="rev-desc">Both platforms self-manage revenue. The Village drives traffic. No migration — pure referral benefit.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── S8: AUDIENCE ──────────────────── -->
+<div class="slide" id="s8">
+  <h2>Who's coming to The Village</h2>
+  <p class="sub">A global, premium, underserved audience at the intersection of equestrian sport and personal development.</p>
+  <div class="audience-grid">
+    <div class="aud-card clickable" data-detail="aud-riders" style="position:relative">
+      <div class="click-hint">+</div>
+      <div class="aud-icon">🏆</div>
+      <div class="aud-title">Elite riders & athletes</div>
+      <div class="aud-desc">Competitive equestrians seeking methodology, coaching and cutting-edge training content. High willingness to pay. Loyal to trusted figures.</div>
+    </div>
+    <div class="aud-card clickable" data-detail="aud-development" style="position:relative">
+      <div class="click-hint">+</div>
+      <div class="aud-icon">🦋</div>
+      <div class="aud-title">Personal development seekers</div>
+      <div class="aud-desc">Drawn to the Butterfly Method® beyond the horse world. Performance mindset, self-knowledge and resilience — a growing and monetisable segment.</div>
+    </div>
+    <div class="aud-card clickable" data-detail="aud-enthusiasts" style="position:relative">
+      <div class="click-hint">+</div>
+      <div class="aud-icon">🌍</div>
+      <div class="aud-title">Premium equestrian enthusiasts</div>
+      <div class="aud-desc">Horse owners, breeders and fans. Predominantly European, English- and Portuguese-speaking. High purchasing power. Passionate community.</div>
+    </div>
+  </div>
+  <div class="aud-proof">
+    <div class="proof-item"><div class="proof-num">5</div><div class="proof-label">Olympic Games<br>of credibility</div></div>
+    <div class="proof-item"><div class="proof-num">3</div><div class="proof-label">External platforms<br>already monetising</div></div>
+    <div class="proof-item"><div class="proof-num">5</div><div class="proof-label">AI agents<br>already live</div></div>
+    <div class="proof-item"><div class="proof-num">PT+EN</div><div class="proof-label">Bilingual reach<br>Europe & Brazil</div></div>
+    <div class="proof-item"><div class="proof-num">8</div><div class="proof-label">Halls at<br>launch</div></div>
+  </div>
+</div>
+
+<!-- ── S9: VISION ────────────────────── -->
+<div class="slide" id="s9">
+  <div class="glow"></div>
+  <div class="content">
+    <div class="eyebrow">The bigger picture</div>
+    <h2>The Village is not a website.<br>It is <em>the infrastructure</em><br>of a personal brand ecosystem.</h2>
+    <p>Luciana Diniz has already built the content, the community, the methodology and the technology. What has been missing is a single digital home worthy of it all — a place where every piece of her world connects, compounds, and converts. That is The Village.</p>
+    <div class="vision-pillars">
+      <div class="pillar clickable" data-detail="pillar-butterfly"><span>🦋</span> Butterfly Method® — holistic framework</div>
+      <div class="pillar clickable" data-detail="pillar-live"><span>🎭</span> Live content — daily revenue</div>
+      <div class="pillar clickable" data-detail="pillar-ai"><span>🤖</span> AI coaching — already built</div>
+      <div class="pillar clickable" data-detail="pillar-bilingual"><span>🌍</span> Bilingual — Europe & Brazil</div>
+      <div class="pillar clickable" data-detail="pillar-freemium"><span>🔑</span> Freemium membership — recurring</div>
+      <div class="pillar clickable" data-detail="pillar-checkmatch"><span>🔮</span> CheckMatch — unique in the market</div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /deck -->
+
+<!-- Navigation -->
+<div id="nav">
+  <button class="nbtn" id="btnP" onclick="go(-1)" disabled>&#8592;</button>
+  <div class="dots" id="dots"></div>
+  <span id="slide-label">01 / 09</span>
+  <button class="nbtn" id="btnN" onclick="go(1)">&#8594;</button>
+</div>
+
+<!-- Modal -->
+<div id="modal-overlay">
+  <div id="modal-box">
+    <div id="modal-header">
+      <div id="modal-emoji"></div>
+      <div id="modal-titles">
+        <div id="modal-tag"></div>
+        <div id="modal-title"></div>
+        <div id="modal-subtitle"></div>
+      </div>
+      <button id="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div id="modal-divider"></div>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<script>
+/* ── Deck navigation ───────────────── */
+const slides = document.querySelectorAll('.slide');
+const N = slides.length;
+let cur = 0;
+let modalOpen = false;
+
+function isMob() { return window.innerWidth <= 768; }
+
+/* On mobile, JS controls visibility via inline style (beats any CSS specificity) */
+if (isMob()) {
+  slides.forEach((s, i) => { if (i !== 0) s.style.display = 'none'; });
+}
+
+const dotsEl = document.getElementById('dots');
+for (let i = 0; i < N; i++) {
+  const d = document.createElement('div');
+  d.className = 'dot' + (i===0?' active':'');
+  d.onclick = () => goTo(i);
+  dotsEl.appendChild(d);
+}
+
+function goTo(n) {
+  if (n === cur) return;
+  if (isMob()) {
+    /* Inline style wins over any ID/class rule */
+    slides[cur].style.display = 'none';
+    cur = n;
+    slides[cur].style.removeProperty('display');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  } else {
+    slides[cur].classList.remove('active');
+    slides[cur].classList.add('out');
+    const prev = cur; cur = n;
+    slides[cur].classList.add('active');
+    setTimeout(() => slides[prev].classList.remove('out'), 500);
+  }
+  document.querySelectorAll('.dot').forEach((d,i) => d.classList.toggle('active', i===cur));
+  document.getElementById('btnP').disabled = cur===0;
+  document.getElementById('btnN').disabled = cur===N-1;
+  document.getElementById('slide-label').textContent =
+    String(cur+1).padStart(2,'0') + ' / ' + String(N).padStart(2,'0');
+}
+
+function go(d) { const n=cur+d; if(n>=0&&n<N) goTo(n); }
+
+document.addEventListener('keydown', e => {
+  if (modalOpen) { if(e.key==='Escape') closeModal(); return; }
+  if (e.key==='ArrowRight'||e.key==='ArrowDown') go(1);
+  if (e.key==='ArrowLeft' ||e.key==='ArrowUp')   go(-1);
+});
+
+/* ── Touch swipe ───────────────────── */
+let tx=0, ty=0;
+document.addEventListener('touchstart', e => { tx=e.touches[0].clientX; ty=e.touches[0].clientY; }, {passive:true});
+document.addEventListener('touchend', e => {
+  if (modalOpen) return;
+  const dx = e.changedTouches[0].clientX - tx;
+  const dy = e.changedTouches[0].clientY - ty;
+  if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 40) go(dx < 0 ? 1 : -1);
+}, {passive:true});
+
+/* ── Modal data ────────────────────── */
+const DETAILS = {
+
+  /* Stats */
+  'stat-olympics': {
+    emoji:'🏅', tag:'Career highlight', title:'Five Olympic Games',
+    subtitle:'Athens · Beijing · London · Rio · Tokyo',
+    sections:[
+      { title:'The career', points:[
+        '<strong>Athens 2004</strong> — Luciana\'s first Olympic debut, representing Portugal in Show Jumping.',
+        '<strong>Beijing 2008, London 2012, Rio 2016</strong> — Three consecutive Games cementing her status as Europe\'s most consistent equestrian competitor.',
+        '<strong>Tokyo 2020</strong> — Fifth Olympic appearance, making her one of the most decorated Portuguese Olympians in equestrian history.',
+        'Competed alongside world-class horses including Lennox, Winningmood and Fit for Fun.',
+      ]},
+      { title:'Why it matters for The Village', points:[
+        'Five Olympics = unmatched credibility in a trust-driven niche.',
+        'Global audience across PT, ES, DE, UK, IE, FR, BR — everywhere equestrian sport is followed.',
+        'Any content Luciana creates is automatically authoritative. No influencer buy-in needed.',
+      ]},
+    ]
+  },
+
+  'stat-butterfly': {
+    emoji:'🦋', tag:'Core IP', title:'8 Dimensions of the Butterfly Method®',
+    subtitle:'A holistic performance framework developed over 30+ years',
+    sections:[
+      { title:'The 8 dimensions', points:[
+        '<strong>Physical</strong> — Fitness, body awareness, rider biomechanics.',
+        '<strong>Technical</strong> — Classic equestrian technique and methodology.',
+        '<strong>Psychological</strong> — Mindset, focus, competition psychology.',
+        '<strong>Emotional</strong> — Self-regulation, resilience, emotional intelligence.',
+        '<strong>Strategic</strong> — Race planning, decision-making under pressure.',
+        '<strong>Social</strong> — Team dynamics, partnership with horse and support crew.',
+        '<strong>Environmental</strong> — Awareness of context, arena, conditions.',
+        '<strong>Spiritual</strong> — Purpose, values, connection with the animal.',
+      ]},
+      { title:'How it powers The Village', points:[
+        'Each dimension becomes a content module in The Academy — free preview / paid full access.',
+        'AI agents are each trained on specific dimensions (e.g. Lucki = psychological).',
+        'The Butterfly Way game scores progress across all 8 dimensions.',
+      ]},
+    ]
+  },
+
+  'stat-ai': {
+    emoji:'🤖', tag:'Technology — Live now', title:'5 AI Coaching Agents',
+    subtitle:'Built on Chatbase · Trained on Luciana\'s methodology · Already operating',
+    sections:[
+      { title:'The agents', points:[
+        '<strong>Butterfly</strong> — Master guide to the full Butterfly Method®. The entry-point agent.',
+        '<strong>Lucki</strong> — Performance psychology specialist. Mindset, focus and mental resilience.',
+        '<strong>Trevo</strong> — Physical wellness and nutrition for riders.',
+        '<strong>Obstacle</strong> — Technical specialist in obstacle courses and show jumping mechanics.',
+        '<strong>LUCKI</strong> — General Village assistant. Navigation, discovery, recommendations.',
+      ]},
+      { title:'The competitive moat', points:[
+        'No equestrian platform offers AI coaching at this depth or specificity.',
+        'Already live — this is not a roadmap item, it is a working product.',
+        'As AI models improve over time, these agents improve at zero marginal cost.',
+        'Free users get limited queries per month. Members get unlimited access.',
+      ]},
+    ]
+  },
+
+  'stat-horses': {
+    emoji:'🐴', tag:'The athletes', title:'6 Champion Horses',
+    subtitle:'Active competition horses — the content at the heart of The Stables',
+    sections:[
+      { title:'The roster', points:[
+        '<strong>Hana</strong> — Young talent in development, documentary-style content potential.',
+        '<strong>Looping</strong> — Experienced competition horse, training archive content.',
+        '<strong>Orelie</strong> — Breeding programme feature, horse welfare case study.',
+        '<strong>Fit for Fun</strong> — Olympic veteran. Rich archive of high-performance content.',
+        '<strong>Winningmood</strong> — Top-level Grand Prix horse. Daily training streamed live.',
+        '<strong>Erball</strong> — Rising star, following the journey from young horse to competition.',
+      ]},
+      { title:'Content value', points:[
+        'Each horse is a character with a story — recurring content that builds emotional connection.',
+        'Daily training with these horses is the raw material for The Auditorium live streams.',
+        'Breeding and welfare content is unique in the equestrian digital space.',
+      ]},
+    ]
+  },
+
+  /* Credentials */
+  'cred-butterfly': {
+    emoji:'🦋', tag:'Core intellectual property', title:'The Butterfly Method®',
+    subtitle:'A complete framework for the holistic development of horse and rider',
+    sections:[
+      { title:'What it is', points:[
+        'A proprietary 8-dimension framework developed over Luciana\'s 30+ year career.',
+        'Covers the rider as a complete human being — not just athletic technique, but mindset, emotion, strategy, spirit.',
+        'Encoded into interactive modules, AI agents, course curriculum and the game system.',
+        'The intellectual backbone of everything The Village offers.',
+      ]},
+      { title:'How it monetises', points:[
+        'Each of the 8 dimensions is a freemium content module — free preview, paid full access.',
+        'Powers the My Way masterclass series on Hotmart.',
+        'The AI agents are each trained on specific dimensions.',
+        'The Butterfly Way game scores engagement across all 8 dimensions.',
+        'Potential for certification programmes and licensed instructor training in the future.',
+      ]},
+    ]
+  },
+
+  'cred-hotmart': {
+    emoji:'🎓', tag:'External platform — Live & generating revenue', title:'Online Academy on Hotmart',
+    subtitle:'Masterclasses and specialist programmes selling internationally',
+    sections:[
+      { title:'Current catalogue', points:[
+        '<strong>My Way I — Foundations</strong>: The Butterfly Method® fundamentals for amateur and competitive riders.',
+        '<strong>My Way II — Advanced</strong>: Performance optimisation and advanced training methodology.',
+        '<strong>My Way III — Mastery</strong>: Competition psychology and elite-level preparation.',
+        '<strong>8-Aspects Reinforcement Program</strong>: Specialist modules with Leo Rauscher (biomechanics), Bettina Hallifax (horse welfare) and other world-class coaches.',
+        '<strong>Jump-Offs</strong>: Video collection of competition footage with technical commentary.',
+        '<strong>E-books</strong>: Written methodology guides and training planners.',
+      ]},
+      { title:'Integration with The Village', points:[
+        'The Village shows product showcase cards with descriptions, previews and testimonials.',
+        '"Get on Hotmart" CTA links directly to each product — no migration, no disruption.',
+        'The Village acts as a discovery layer, increasing Hotmart conversion rates.',
+      ]},
+    ]
+  },
+
+  'cred-ai': {
+    emoji:'🤖', tag:'Technology — Already live', title:'AI Coaching Agents (Chatbase)',
+    subtitle:'5 specialised agents trained on Luciana\'s methodology',
+    sections:[
+      { title:'The agents in detail', points:[
+        '<strong>Butterfly</strong> — Full Butterfly Method® guide. Entry-point agent for new users.',
+        '<strong>Lucki</strong> — Performance psychology coach. Handles mindset and mental game.',
+        '<strong>Trevo</strong> — Physical and nutritional wellness for riders.',
+        '<strong>Obstacle</strong> — Technical expert on obstacle course and show jumping mechanics.',
+        '<strong>LUCKI</strong> — General Village assistant. Helps users navigate the platform.',
+      ]},
+      { title:'Product and access model', points:[
+        'Free users: limited queries per month (lead generation, product discovery).',
+        'Members: unlimited access to all 5 agents.',
+        'Each agent is a standalone feature visible in The Lab — and a conversion tool for membership.',
+        'No equestrian competitor offers this depth of AI-powered coaching.',
+      ]},
+    ]
+  },
+
+  'cred-checkmatch': {
+    emoji:'🔮', tag:'Proprietary tool — Built & functional', title:'CheckMatch App',
+    subtitle:'Horse-rider compatibility assessment — unique globally',
+    sections:[
+      { title:'What it does', points:[
+        'Users complete a structured profile questionnaire covering riding style, goals, experience and temperament.',
+        'The algorithm cross-references with horse profiles and returns a compatibility assessment.',
+        'Outputs include compatibility percentage, key alignment factors and recommendations.',
+        'Already built and functional — not a concept, a working product.',
+      ]},
+      { title:'Strategic value', points:[
+        'No other equestrian digital platform offers anything comparable.',
+        'Powerful lead magnet: free to try, membership required for full report.',
+        'Potential to license to equestrian centres, studs and horse traders.',
+        'Long-term: could become a standalone B2B SaaS product.',
+      ]},
+    ]
+  },
+
+  /* Halls */
+  'hall-square': {
+    emoji:'🏛️', tag:'Hall 1 · Hub', title:'Village Square',
+    subtitle:'The entry point — where every journey begins',
+    sections:[
+      { title:'What\'s here', points:[
+        '<strong>Interactive village map</strong> — the central navigation experience. Users see The Village as a visual world and choose their hall.',
+        '<strong>Luciana\'s story</strong> — her Olympic journey, the Butterfly Method® origin, and the vision behind The Village.',
+        '<strong>Brand manifesto</strong> — "The Butterfly Philosophy" — the values and purpose of the platform.',
+        '<strong>CTAs to every hall</strong> — from Village Square, every other hall is one click away.',
+        '<strong>Featured content</strong> — rotating highlights: latest live, newest course, top-ranked game player.',
+      ]},
+      { title:'Design intent', points:[
+        'First impressions define whether a visitor becomes a member. Village Square must be immersive, not functional.',
+        'The map navigation is the differentiator — nothing like it exists in the equestrian space.',
+      ]},
+    ]
+  },
+
+  'hall-academy': {
+    emoji:'🎓', tag:'Hall 2 · Freemium', title:'The Academy (Holistic)',
+    subtitle:'The intellectual heart of The Village — rider development as a whole person',
+    sections:[
+      { title:'Content', points:[
+        '<strong>Butterfly Method® modules (8 dimensions)</strong> — free preview of dimension 1; full access (all 8) for members.',
+        '<strong>My Way I/II/III</strong> — Hotmart masterclass cards with previews and purchase links.',
+        '<strong>Jump-Offs & e-books</strong> — Hotmart product showcase.',
+        '<strong>YouTube previews</strong> — embedded clips from the free channel, linking to full content.',
+        '<strong>Personal development path</strong> — rider wellness, psychology, performance journaling.',
+      ]},
+      { title:'The positioning shift', points:[
+        'This is not a traditional riding academy. It is a holistic development platform for the rider as a human being.',
+        'The Butterfly Method® treats the rider\'s inner world as inseparable from their performance.',
+        'This positioning reaches beyond equestrian sport into the broader personal development market.',
+      ]},
+    ]
+  },
+
+  'hall-stables': {
+    emoji:'🐴', tag:'Hall 3 · Equestrian', title:'The Stables / Welfare',
+    subtitle:'The horses, the breeding programme, and the philosophy of animal welfare',
+    sections:[
+      { title:'Content', points:[
+        '<strong>6 horse profiles</strong> — Hana, Looping, Orelie, Fit for Fun, Winningmood, Erball. Each with biography, training diary, competition history.',
+        '<strong>Breeding programme</strong> — documentation of bloodlines, breeding philosophy, foal development.',
+        '<strong>Animal welfare philosophy</strong> — Luciana\'s approach to horse health, stress, and ethical training.',
+        '<strong>Expert courses (Hotmart)</strong> — 8-Aspects Reinforcement Program with Leo Rauscher, Bettina Hallifax and specialist guests.',
+      ]},
+      { title:'Why this hall matters', points:[
+        'The horses are characters — each has a following, a story, emotional content potential.',
+        'Welfare content is uniquely differentiating in a space where horse ethics are increasingly important.',
+        'Daily training with these horses feeds directly into The Auditorium live streams.',
+      ]},
+    ]
+  },
+
+  'hall-lab': {
+    emoji:'🤖', tag:'Hall 4 · AI · Live now', title:'The Lab',
+    subtitle:'5 AI coaching agents — already live, already working',
+    sections:[
+      { title:'The agents', points:[
+        '<strong>Butterfly</strong> — Your guide to the Butterfly Method® across all 8 dimensions.',
+        '<strong>Lucki</strong> — Performance psychology. Mindset, focus, competition anxiety.',
+        '<strong>Trevo</strong> — Physical wellness and nutrition for riders.',
+        '<strong>Obstacle</strong> — Technical coaching for obstacle courses and show jumping.',
+        '<strong>LUCKI</strong> — Village guide. Helps you find what you\'re looking for.',
+      ]},
+      { title:'Access model', points:[
+        'Free users: 10 queries/month per agent — enough to experience the value.',
+        'Members: unlimited access to all agents — a core membership benefit.',
+        'No equestrian platform in the world offers AI coaching at this depth.',
+        'The Lab is a conversion engine: experience the agents, upgrade to access them fully.',
+      ]},
+    ]
+  },
+
+  'hall-arena': {
+    emoji:'🎮', tag:'Hall 5 · Gamification', title:'The Arena',
+    subtitle:'The Butterfly Way — a game that turns learning into competition',
+    sections:[
+      { title:'How it works', points:[
+        '<strong>Coins system</strong> — users earn coins by completing modules, attending lives, sharing content, referring members.',
+        '<strong>Leaderboard</strong> — a global ranking of The Village\'s most engaged community members.',
+        '<strong>Achievements & badges</strong> — milestone rewards for completing Butterfly Method® dimensions, attending live events, etc.',
+        '<strong>Optional: scoring dashboard</strong> — may be displayed in The Auditorium during live events to add competitive energy.',
+      ]},
+      { title:'Strategic value', points:[
+        'Gamification drives daily return visits — the single most important metric for membership retention.',
+        'Coins create an economy that makes every piece of content feel rewarding.',
+        'The leaderboard creates community identity: "I\'m in the top 10 of The Village."',
+      ]},
+    ]
+  },
+
+  'hall-match': {
+    emoji:'🔮', tag:'Hall 6 · App · Built', title:'The Match Room',
+    subtitle:'CheckMatch — horse-rider compatibility, unique in the world',
+    sections:[
+      { title:'The product', points:[
+        'Users complete a structured questionnaire: riding style, experience level, goals, personality, temperament.',
+        'The algorithm outputs a compatibility assessment — percentage match, key factors, recommendations.',
+        'Full report includes suggested horse types, training approach adjustments, and red-flag warnings.',
+        '<strong>Already built and functional</strong> — not a roadmap item.',
+      ]},
+      { title:'Access and business model', points:[
+        'Free tier: complete the questionnaire, get a summary score.',
+        'Members: full detailed report with all recommendations.',
+        'Lead magnet potential: free CheckMatch link shared by equestrian centres and coaches.',
+        'Long-term: licensing to studs, equestrian schools, and horse dealers as a B2B tool.',
+      ]},
+    ]
+  },
+
+  'hall-auditorium': {
+    emoji:'🎭', tag:'Hall 7 · Primary revenue', title:'The Auditorium',
+    subtitle:'Live training streams — the heartbeat and revenue engine of The Village',
+    sections:[
+      { title:'What streams here', points:[
+        '<strong>Daily training sessions</strong> — real, unscripted sessions with Luciana and her horses. Raw, authentic, exclusive.',
+        '<strong>Specialist guest masterclasses</strong> — live sessions with the expert coaches from The Stables / Welfare.',
+        '<strong>Themed live events</strong> — seasonal programmes, competition prep sessions, Q&A lives.',
+        '<strong>Session archive</strong> — all past lives available on-demand to members.',
+        '<strong>Optional: game leaderboard</strong> — live coin scoring displayed during events to drive engagement.',
+      ]},
+      { title:'Revenue mechanics', points:[
+        '<strong>Pay-per-event</strong> — individual sessions purchased via Stripe (own gateway).',
+        '<strong>Membership inclusion</strong> — live archive and selected lives included in paid membership tier.',
+        'Low production cost: a camera, a stable, and an Olympian. High perceived value.',
+        'The archive compounds in value — the more sessions exist, the stronger the membership proposition.',
+      ]},
+    ]
+  },
+
+  'hall-shop': {
+    emoji:'🛍️', tag:'Hall 8 · Partners', title:'The Shop',
+    subtitle:'Curated partner products — aggregator model, zero inventory risk',
+    sections:[
+      { title:'What\'s in the shop', points:[
+        '<strong>Horse Circles</strong> — premium equestrian equipment, saddles, bridles, accessories. Primary partner.',
+        '<strong>LD Merchandise</strong> — branded clothing, accessories, lifestyle products. Managed via a partner platform.',
+        '<strong>Brand affiliates</strong> — curated selection of equestrian and wellness brands aligned with Luciana\'s values.',
+      ]},
+      { title:'How it works (no own checkout)', points:[
+        'The Village is a showcase only — product cards, images, descriptions, Luciana\'s endorsement.',
+        '"Buy now" redirects to the partner\'s own platform for checkout, payment and fulfilment.',
+        'Zero inventory, zero logistics, zero payment processing for The Village.',
+        'Revenue model: affiliate commission on referral sales.',
+        '<strong>Own gateway (Stripe)</strong> is only needed for membership subscriptions and paid lives in The Auditorium.',
+      ]},
+    ]
+  },
+
+  /* Ecosystem */
+  'eco-hotmart': {
+    emoji:'🎓', tag:'External platform', title:'Hotmart',
+    subtitle:'The course and masterclass engine — self-contained, already live',
+    sections:[
+      { title:'Current catalogue', points:[
+        '<strong>My Way I</strong> — Foundations of the Butterfly Method® for riders of all levels.',
+        '<strong>My Way II</strong> — Advanced performance methodology and training optimisation.',
+        '<strong>My Way III</strong> — Mastery, competition psychology, elite preparation.',
+        '<strong>8-Aspects Reinforcement Program</strong> — 8 specialist modules with Leo Rauscher, Bettina Hallifax and guest coaches.',
+        '<strong>Jump-Offs video series</strong> — competition footage with technical commentary.',
+        '<strong>E-books</strong> — written training planners, methodology guides, preparation protocols.',
+      ]},
+      { title:'Integration model', points:[
+        'The Village shows product cards with descriptions, course previews and social proof.',
+        'All purchases happen on Hotmart — no migration, no disruption to existing revenue.',
+        'The Village is a high-quality traffic driver: contextual product placement converts better than cold Hotmart traffic.',
+      ]},
+    ]
+  },
+
+  'eco-youtube': {
+    emoji:'▶️', tag:'External platform', title:'YouTube',
+    subtitle:'Free content and paid channel membership — managed by YouTube',
+    sections:[
+      { title:'What lives on YouTube', points:[
+        '<strong>Free channel</strong> — training clips, educational shorts, event vlogs, behind-the-scenes content.',
+        '<strong>YouTube Channel Membership</strong> — paid tier managed entirely by YouTube.',
+        '<strong>Embedded previews</strong> — Village pages embed YouTube clips as context and discovery.',
+        '<strong>Video course previews</strong> — free excerpts from Hotmart courses drive course sales.',
+      ]},
+      { title:'Integration model', points:[
+        'The Village embeds and links — it does not host video natively (except live streams).',
+        'YouTube remains the video platform of record for free and community content.',
+        'The Village\'s live streams in The Auditorium are the only native video content — and the only revenue-bearing video.',
+      ]},
+    ]
+  },
+
+  'eco-native': {
+    emoji:'🌐', tag:'The Village itself', title:'Native Site — The Village',
+    subtitle:'The freemium hub where the ecosystem connects and revenue is generated',
+    sections:[
+      { title:'Native content', points:[
+        '<strong>Butterfly Method® interactive modules</strong> — 8 dimensions, freemium access (1 free / 8 paid).',
+        '<strong>AI agents (The Lab)</strong> — 5 Chatbase agents, limited free / unlimited member.',
+        '<strong>CheckMatch (The Match Room)</strong> — free assessment summary / full report for members.',
+        '<strong>The Butterfly Way game (The Arena)</strong> — coins, leaderboard, achievements.',
+        '<strong>Live training streams (The Auditorium)</strong> — pay-per-event or membership.',
+      ]},
+      { title:'Revenue on the native site', points:[
+        '<strong>Membership subscription</strong> — monthly recurring via Stripe.',
+        '<strong>Paid lives</strong> — individual event purchase via Stripe.',
+        'Everything else (Hotmart, YouTube, Shop) redirects out — no native checkout needed for those.',
+      ]},
+    ]
+  },
+
+  'eco-shop': {
+    emoji:'🛍️', tag:'Partner aggregator', title:'The Shop',
+    subtitle:'Curated product showcase — zero inventory, redirect model',
+    sections:[
+      { title:'Partners', points:[
+        '<strong>Horse Circles</strong> — premium equestrian equipment. Saddles, bridles, grooming, accessories.',
+        '<strong>LD Merchandise</strong> — branded lifestyle and clothing, managed via a fulfilment partner.',
+        '<strong>Equestrian wellness brands</strong> — supplements, rider fitness gear, recovery products.',
+        '<strong>Future affiliate partners</strong> — brands that align with Luciana\'s values and audience.',
+      ]},
+      { title:'Model and risk profile', points:[
+        'The Village curates and presents. Partners handle stock, checkout, logistics and customer service.',
+        'Revenue: affiliate commission on referred sales. No inventory risk.',
+        'The Shop enhances the Village experience without adding operational complexity.',
+      ]},
+    ]
+  },
+
+  /* Revenue */
+  'rev-lives': {
+    emoji:'🎭', tag:'Primary revenue driver', title:'Live Training Streams',
+    subtitle:'The Auditorium — authentic daily access to an Olympian\'s world',
+    sections:[
+      { title:'What gets streamed', points:[
+        '<strong>Daily training sessions</strong> — Luciana riding Winningmood, Fit for Fun and the other horses. Real sessions, unscripted.',
+        '<strong>Technical commentary</strong> — Luciana explains decisions, corrections and training philosophy in real time.',
+        '<strong>Guest masterclasses</strong> — Live sessions with the expert coaches from the 8-Aspects program.',
+        '<strong>Themed events</strong> — Competition preparation, seasonal programmes, live Q&A sessions.',
+      ]},
+      { title:'Revenue mechanics', points:[
+        '<strong>Pay-per-event</strong>: individual session purchase via Stripe.',
+        '<strong>Membership</strong>: live archive + selected events included in monthly membership.',
+        'Production cost: minimal. A camera, a stable, an Olympian. High perceived value.',
+        'Archive value: every session recorded and stored. Members access a growing library. The older the platform, the stronger the proposition.',
+      ]},
+    ]
+  },
+
+  'rev-membership': {
+    emoji:'🔑', tag:'Recurring revenue', title:'Site Membership',
+    subtitle:'Freemium model — free taste, paid depth',
+    sections:[
+      { title:'Free tier (always available)', points:[
+        '1 of 8 Butterfly Method® dimensions (interactive module).',
+        '10 AI agent queries per month (all 5 agents).',
+        'CheckMatch profile and summary score.',
+        'Game access with coin earning (limited leaderboard visibility).',
+        'YouTube-embedded content and Hotmart product cards.',
+      ]},
+      { title:'Paid membership tier', points:[
+        'All 8 Butterfly Method® dimensions — full interactive content.',
+        'Unlimited AI agent access across all 5 coaches.',
+        'Full CheckMatch report with detailed recommendations.',
+        'Live stream archive — all past Auditorium sessions on demand.',
+        'Member-only content, early access to new courses and events.',
+        '<strong>Gateway</strong>: Stripe · <strong>Billing</strong>: monthly recurring.',
+      ]},
+    ]
+  },
+
+  'rev-external': {
+    emoji:'🔗', tag:'External · No migration needed', title:'Hotmart + YouTube',
+    subtitle:'Both platforms operate independently — The Village drives traffic',
+    sections:[
+      { title:'How the revenue flows', points:[
+        '<strong>Hotmart</strong>: manages all course transactions, refunds, affiliate tracking, certificates and customer support.',
+        '<strong>YouTube</strong>: manages video monetisation, channel membership and ad revenue.',
+        'The Village shows product cards and preview clips — all purchases happen off-site.',
+        'Zero additional payment infrastructure needed for either platform.',
+      ]},
+      { title:'The Village\'s role', points:[
+        'Every visitor who explores The Academy discovers Hotmart products in context — with Luciana\'s voice and brand, not a generic sales page.',
+        'Contextual placement converts at a higher rate than cold traffic.',
+        'The Village is the discovery layer. Hotmart and YouTube are the transaction layer.',
+        'No migration risk, no disruption to existing revenue streams.',
+      ]},
+    ]
+  },
+
+  /* Audience */
+  'aud-riders': {
+    emoji:'🏆', tag:'Audience segment 1', title:'Elite riders & athletes',
+    subtitle:'Competitive equestrians — high intent, high willingness to pay',
+    sections:[
+      { title:'Who they are', points:[
+        'FEI-ranked competitors, national federation members, serious amateur riders at club and regional level.',
+        'Active in show jumping, dressage, eventing and endurance disciplines across Europe and Brazil.',
+        'Typically invest significantly in coaching, clinics, and training resources.',
+        'Deeply loyal to trusted authorities in the sport.',
+      ]},
+      { title:'What they want from The Village', points:[
+        'World-class methodology from a five-time Olympian — the highest possible credential.',
+        'Technical content: The Academy, The Stables expert courses, live masterclasses in The Auditorium.',
+        'AI coaching available between sessions — Lucki, Butterfly, Obstacle agents.',
+        'Community: The Butterfly Way leaderboard and game give them a competitive social layer.',
+      ]},
+    ]
+  },
+
+  'aud-development': {
+    emoji:'🦋', tag:'Audience segment 2', title:'Personal development seekers',
+    subtitle:'Beyond the horse world — the Butterfly Method® as a life philosophy',
+    sections:[
+      { title:'Who they are', points:[
+        'Not necessarily equestrians. Drawn to the Butterfly Method® as a performance and self-knowledge framework.',
+        'Interested in mindset, emotional intelligence, physical performance, strategic thinking.',
+        'Often discover Luciana through YouTube, social media or word of mouth in non-equestrian communities.',
+        'A growing and highly monetisable segment — personal development is a multi-billion market.',
+      ]},
+      { title:'What they want from The Village', points:[
+        'The 8-dimension Butterfly Method® modules — applicable to any high-performance context.',
+        'AI coaching (Lucki, Trevo) for mindset and wellness guidance.',
+        'A community of like-minded people pursuing holistic self-improvement.',
+        'Entry point: free module → membership for full access.',
+      ]},
+    ]
+  },
+
+  'aud-enthusiasts': {
+    emoji:'🌍', tag:'Audience segment 3', title:'Premium equestrian enthusiasts',
+    subtitle:'Horse owners, breeders and passionate fans — Europe & Brazil',
+    sections:[
+      { title:'Who they are', points:[
+        'Horse owners (pleasure riders, leisure riders, breeders) who may not compete at elite level.',
+        'Equestrian parents investing in their children\'s riding development.',
+        'Fans of show jumping who follow Luciana\'s competition career.',
+        'Geographically: Portugal, Spain, Germany, United Kingdom, Ireland, France, Switzerland. Brazil as a strong secondary market.',
+      ]},
+      { title:'What they want from The Village', points:[
+        'Horse profiles and welfare content in The Stables — emotional connection with the animals.',
+        'The Shop — curated equestrian products they trust because Luciana endorses them.',
+        'Live streams from The Auditorium — watching a world-class Olympian work daily.',
+        'CheckMatch — a tool that\'s genuinely useful for horse owners evaluating compatibility.',
+      ]},
+    ]
+  },
+
+  /* Vision pillars */
+  'pillar-butterfly': {
+    emoji:'🦋', tag:'Core IP', title:'Butterfly Method®',
+    subtitle:'The intellectual engine of everything The Village does',
+    sections:[
+      { title:'The framework', points:[
+        '8 dimensions covering the rider as a complete human being: Physical, Technical, Psychological, Emotional, Strategic, Social, Environmental, Spiritual.',
+        'Developed and refined across 30+ years of elite competition at the highest level.',
+        'The only methodology of its kind in equestrian sport — owned entirely by Luciana.',
+      ]},
+      { title:'How it powers The Village', points:[
+        'Each dimension is a freemium content module. Free preview. Paid full access.',
+        'The AI agents are each specialised in one or more dimensions.',
+        'The game scores player progress across all 8 dimensions.',
+        'The Academy is structured around it. The Auditorium teaches it in practice.',
+        'This is not licensed content — it is proprietary IP. The Village is its home.',
+      ]},
+    ]
+  },
+
+  'pillar-live': {
+    emoji:'🎭', tag:'Primary revenue', title:'Live content',
+    subtitle:'Daily training streams — the content no competitor can replicate',
+    sections:[
+      { title:'The opportunity', points:[
+        'A five-time Olympian training world-class horses daily — and nobody is watching.',
+        'This daily work, streamed live or published as paid on-demand content, is extraordinarily valuable to the audience.',
+        'No existing equestrian platform offers this level of authentic, real-time access.',
+      ]},
+      { title:'The economics', points:[
+        'Production cost: minimal (camera, stable, athlete already present).',
+        'Revenue: pay-per-event or included in membership.',
+        'Compound asset: the archive grows in value every day.',
+        'Every live session is also a lead magnet — a clip goes on YouTube, which drives traffic to The Auditorium.',
+      ]},
+    ]
+  },
+
+  'pillar-ai': {
+    emoji:'🤖', tag:'Technology moat', title:'AI coaching — already built',
+    subtitle:'5 agents live now. No competitor comes close.',
+    sections:[
+      { title:'The moat', points:[
+        'These agents are trained specifically on Luciana\'s methodology — not generic fitness or coaching knowledge.',
+        'They are already live. This is not a feature on a roadmap — it is a working product being used today.',
+        'The equestrian digital space has no AI coaching of this depth or specificity.',
+        'As AI models improve globally, these agents improve automatically — at zero marginal cost.',
+      ]},
+      { title:'Business role', points:[
+        'Free tier (limited queries) drives user acquisition — the agents are a hook.',
+        'Unlimited access for members — a core reason to subscribe.',
+        'Over time: potential to offer The Lab as a standalone product to equestrian schools and coaches.',
+      ]},
+    ]
+  },
+
+  'pillar-bilingual': {
+    emoji:'🌍', tag:'Market reach', title:'Bilingual — Europe & Brazil',
+    subtitle:'Portuguese and English from day one — two premium markets',
+    sections:[
+      { title:'The markets', points:[
+        '<strong>Portugal & Europe</strong>: Luciana\'s home market. Active in PT, ES, DE, UK, IE, FR, CH equestrian circuits. Olympian credibility is immediate.',
+        '<strong>Brazil</strong>: The world\'s largest Portuguese-speaking market. Fast-growing equestrian sector. Luciana already has significant following.',
+        '<strong>English</strong>: Opens The Village to the global equestrian community — international competition circuit, English-speaking markets worldwide.',
+      ]},
+      { title:'Why it matters', points:[
+        'Most equestrian content creators are mono-market. Luciana is genuinely bilingual and bicultural.',
+        'A bilingual platform immediately doubles the addressable audience without needing separate products.',
+        'English content also makes The Village investable and expandable beyond the Lusophone market.',
+      ]},
+    ]
+  },
+
+  'pillar-freemium': {
+    emoji:'🔑', tag:'Revenue model', title:'Freemium membership',
+    subtitle:'Free enough to hook. Deep enough to pay for.',
+    sections:[
+      { title:'The model', points:[
+        '<strong>Free</strong>: 1 Butterfly Method® dimension, 10 AI queries/month, CheckMatch summary, game access.',
+        '<strong>Paid</strong>: All 8 dimensions, unlimited AI agents, full CheckMatch report, live archive, member-only events.',
+        'Every free user experiences real value — the methodology works, the agents are useful, the game is engaging.',
+        'The paid tier is not a paywall on basics. It is a significant upgrade in depth and exclusivity.',
+      ]},
+      { title:'The economics', points:[
+        'Monthly recurring revenue via Stripe — the most predictable and scalable revenue model.',
+        'Churn is reduced by the compound value of the archive: the longer you\'re a member, the more you have.',
+        'The game and community add social stickiness — members don\'t leave because they\'d lose their rank.',
+        'Future: annual plans with discounts, team/stable plans for equestrian schools.',
+      ]},
+    ]
+  },
+
+  'pillar-checkmatch': {
+    emoji:'🔮', tag:'Unique product', title:'CheckMatch',
+    subtitle:'Horse-rider compatibility — no competitor offers this anywhere',
+    sections:[
+      { title:'The product', points:[
+        'A structured compatibility assessment between a rider\'s profile and horse profile.',
+        'Users answer a questionnaire; the algorithm outputs a compatibility score, key alignment factors, and recommendations.',
+        'Already built and functional.',
+        'Unique globally — no equestrian digital platform offers this.',
+      ]},
+      { title:'Strategic potential', points:[
+        'Strong lead magnet: free to try, membership for full report. High-intent users share it widely.',
+        'B2B licensing: equestrian schools, studs, and horse dealers could licence CheckMatch for their own client consultations.',
+        'Long-term: standalone SaaS tool with its own business case.',
+        'In The Village: drives discovery of The Academy and membership conversion.',
+      ]},
+    ]
+  },
+};
+
+/* ── Modal logic ───────────────────── */
+const overlay = document.getElementById('modal-overlay');
+
+function showModal(key) {
+  const d = DETAILS[key];
+  if (!d) return;
+  document.getElementById('modal-emoji').textContent = d.emoji;
+  document.getElementById('modal-tag').textContent = d.tag;
+  document.getElementById('modal-title').textContent = d.title;
+  document.getElementById('modal-subtitle').textContent = d.subtitle;
+
+  let html = '';
+  (d.sections || []).forEach(sec => {
+    html += `<div class="modal-section">`;
+    if (sec.title) html += `<div class="modal-section-title">${sec.title}</div>`;
+    (sec.points || []).forEach(pt => {
+      html += `<div class="modal-point"><div class="modal-dot">▸</div><div class="modal-text">${pt}</div></div>`;
+    });
+    html += `</div>`;
+  });
+  if (d.note) html += `<div class="modal-note">${d.note}</div>`;
+  document.getElementById('modal-body').innerHTML = html;
+  document.getElementById('modal-box').scrollTop = 0;
+
+  overlay.classList.add('open');
+  modalOpen = true;
+}
+
+function closeModal() {
+  overlay.classList.remove('open');
+  modalOpen = false;
+}
+
+overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
+
+/* ── Bind all clickable elements ───── */
+document.querySelectorAll('[data-detail]').forEach(el => {
+  el.addEventListener('click', e => {
+    e.stopPropagation();
+    showModal(el.dataset.detail);
+  });
+});
+</script>
+</body>
+</html>
