@@ -1505,4 +1505,13 @@ function closeModal() {
 
 overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
 
-/* ── Bind
+/* ── Bind clickable elements ──────── */
+document.querySelectorAll('[data-detail]').forEach(el => {
+  el.addEventListener('click', e => {
+    e.stopPropagation();
+    showModal(el.dataset.detail);
+  });
+});
+</script>
+</body>
+</html>
