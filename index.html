@@ -487,7 +487,7 @@ html, body {
       <div class="cred-icon">🤖</div>
       <div class="cred-text">
         <strong>AI Agents — Chatbase</strong>
-        Five specialised AI coaching agents (Butterfly, Lucki, Trevo, Obstacle, LUCKI) — already live and operating.
+        Five specialised AI coaching agents (Butterfly, Lucki, Trevo, Obstacle, Village Guide) — already live and operating.
       </div>
     </div>
     <div class="cred-item clickable" data-detail="cred-checkmatch" style="position:relative">
@@ -587,7 +587,7 @@ html, body {
       <div class="click-hint">+</div>
       <div class="hall-emoji">🤖</div>
       <div class="hall-name">The Lab</div>
-      <div class="hall-desc">5 AI coaching agents — already live. Butterfly, Lucki, Trevo, Obstacle and LUCKI. Each a specialist.</div>
+      <div class="hall-desc">5 AI coaching agents — already live. Butterfly, Lucki, Trevo, Obstacle and Village Guide. Each a specialist.</div>
       <div class="hall-tag">AI · Live now</div>
     </div>
     <div class="hall clickable" data-detail="hall-arena" style="position:relative">
@@ -900,7 +900,7 @@ const DETAILS = {
         '<strong>Lucki</strong> — Performance psychology specialist. Mindset, focus and mental resilience.',
         '<strong>Trevo</strong> — Physical wellness and nutrition for riders.',
         '<strong>Obstacle</strong> — Technical specialist in obstacle courses and show jumping mechanics.',
-        '<strong>LUCKI</strong> — General Village assistant. Navigation, discovery, recommendations.',
+        '<strong>Village Guide</strong> — General assistant & navigator. Helps users explore The Village, discover content and find what they need.',
       ]},
       { title:'The competitive moat', points:[
         'No equestrian platform offers AI coaching at this depth or specificity.',
@@ -981,7 +981,7 @@ const DETAILS = {
         '<strong>Lucki</strong> — Performance psychology coach. Handles mindset and mental game.',
         '<strong>Trevo</strong> — Physical and nutritional wellness for riders.',
         '<strong>Obstacle</strong> — Technical expert on obstacle course and show jumping mechanics.',
-        '<strong>LUCKI</strong> — General Village assistant. Helps users navigate the platform.',
+        '<strong>Village Guide</strong> — General assistant. Navigates users through The Village, answers questions, surfaces the right content.',
       ]},
       { title:'Product and access model', points:[
         'Free users: limited queries per month (lead generation, product discovery).',
@@ -1076,7 +1076,7 @@ const DETAILS = {
         '<strong>Lucki</strong> — Performance psychology. Mindset, focus, competition anxiety.',
         '<strong>Trevo</strong> — Physical wellness and nutrition for riders.',
         '<strong>Obstacle</strong> — Technical coaching for obstacle courses and show jumping.',
-        '<strong>LUCKI</strong> — Village guide. Helps you find what you\'re looking for.',
+        '<strong>Village Guide</strong> — Your navigator inside The Village. Helps you find content, agents and halls.',
       ]},
       { title:'Access model', points:[
         'Free users: 10 queries/month per agent — enough to experience the value.',
@@ -1505,13 +1505,4 @@ function closeModal() {
 
 overlay.addEventListener('click', e => { if (e.target === overlay) closeModal(); });
 
-/* ── Bind all clickable elements ───── */
-document.querySelectorAll('[data-detail]').forEach(el => {
-  el.addEventListener('click', e => {
-    e.stopPropagation();
-    showModal(el.dataset.detail);
-  });
-});
-</script>
-</body>
-</html>
+/* ── Bind
